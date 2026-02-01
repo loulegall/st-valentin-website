@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* Quand la page d'introduction est visible, permettre le scroll */
+body.intro-visible {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Quand la page principale est visible, empêcher le scroll */
+body.main-visible {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Page d'introduction */
+.intro-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    animation: fadeIn 0.8s ease-in;
+}
+
+.intro-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 90%;
+    margin: auto;
+}
+
+.intro-content h1 {
+    color: #764ba2;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.intro-text {
+    font-size: 1.2em;
+    color: #764ba2;
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.poem {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    border: 2px solid rgba(118, 75, 162, 0.3);
+}
+
+.poem-line {
+    font-size: 1.1em;
+    color: #764ba2;
+    margin: 8px 0;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.poem-signature {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #764ba2;
+}
+
+.poem-signature em {
+    font-style: italic;
+    font-weight: normal;
+}
+
+.btn-suite {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-top: 30px;
+    padding: 15px 50px;
+    font-size: 1.2em;
+    width: auto;
+    min-width: 200px;
+}
+
+.btn-suite:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.container {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 90%;
+    animation: fadeIn 0.8s ease-in;
+}
+
+h1 {
+    color: #764ba2;
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.buttons-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    min-height: 80px;
+    width: 100%;
+    overflow: visible;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-oui {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    margin-right: 135px;
+}
+
+.btn-oui:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-non {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    position: fixed;
+    transition: left 0.1s ease-out, top 0.1s ease-out;
+    will-change: left, top;
+    cursor: not-allowed;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    z-index: 1000;
+}
+
+.btn-non:hover {
+    transform: scale(1.05);
+}
+
+.gif-container {
+    margin-top: 30px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.gif-container.hidden {
+    display: none;
+}
+
+.gif-container img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.celebration-text {
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: #764ba2;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .intro-container {
+        padding: 15px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    
+    .intro-content {
+        padding: 25px;
+        width: 95%;
+    }
+    
+    .intro-content h1 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+    
+    .intro-text {
+        font-size: 1em;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    .poem {
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .poem-line {
+        font-size: 0.95em;
+        margin: 6px 0;
+    }
+    
+    .btn-suite {
+        padding: 12px 30px;
+        font-size: 1em;
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .btn {
+        width: 200px;
+    }
+}

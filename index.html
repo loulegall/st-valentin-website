@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veux tu être ma valentine ?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Page d'introduction -->
+    <div id="introPage" class="intro-container">
+        <div class="intro-content">
+            <h1>Coucou c'est Lou</h1>
+            <p class="intro-text">
+            
+                Comme tu dois le savoir les temps sont rude sentimentalement parlant.<br>
+                Alors c'est pour cette raison que je te fais ce poème:
+            </p>
+            
+            <div class="poem">
+                <p class="poem-line">Roses sont rouges,</p>
+                <p class="poem-line">Violettes sont bleues,</p>
+                <p class="poem-line">Les SMS c'est nul,</p>
+                <p class="poem-line">Mais toi tu es géniale ! 💙</p>
+                <br>
+                <p class="poem-line">Les coeurs brisés,</p>
+                <p class="poem-line">Les larmes versées,</p>
+                <p class="poem-line">Mais avec toi à mes côtés,</p>
+                <p class="poem-line">Tout serait plus facile ! ✨</p>
+                <br>
+                <p class="poem-line">Alors dis-moi oui,</p>
+                <p class="poem-line">Ou je vais pleurer,</p>
+                <br>
+                <p class="poem-signature"><em>Loupiotte</em></p>
+            </div>
+            
+            <button id="btnSuite" class="btn btn-suite">Passe à la suite</button>
+        </div>
+    </div>
+    
+    <!-- Page principale avec les boutons -->
+    <div id="mainPage" class="container hidden">
+        <h1>Veux tu être valentine ?</h1>
+        
+        <div class="buttons-container">
+            <button id="btnOui" class="btn btn-oui">Oui</button>
+            <button id="btnNon" class="btn btn-non">Non</button>
+        </div>
+        
+        <div id="gifContainer" class="gif-container hidden">
+            <img src="./img/Happy Lets Go GIF by SpongeBob SquarePants.gif" alt="Célébration" id="celebrationGif">
+            <p class="celebration-text">🎉 Génial ! 🎉</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
