@@ -262,9 +262,43 @@ h1 {
         flex-direction: column;
         align-items: center;
         gap: 20px;
+        min-height: 150px;
     }
     
     .btn {
         width: 200px;
     }
+    
+    .btn-oui {
+        margin-right: 0;
+    }
+    
+    .btn-non {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+    }
+}
+
+/* Animation de rebond pour mobile */
+@keyframes bounceMobile {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    25% {
+        transform: translateY(-30px) scale(1.1);
+    }
+    50% {
+        transform: translateY(0) scale(1);
+    }
+    75% {
+        transform: translateY(-20px) scale(1.05);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.btn-non.bouncing {
+    animation: bounceMobile 0.5s ease-out;
 }

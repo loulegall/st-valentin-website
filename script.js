@@ -23,9 +23,13 @@ btnSuite.addEventListener('click', function() {
         mainPage.style.opacity = '0';
         mainPage.style.transition = 'opacity 0.5s ease-in';
         
-        // Initialiser le bouton "Non" en position fixed
+        // Initialiser le bouton "Non" selon le type d'appareil
         if (btnNon) {
-            btnNon.style.position = 'fixed';
+            if (isMobile()) {
+                btnNon.style.position = 'relative';
+            } else {
+                btnNon.style.position = 'fixed';
+            }
         }
         
         // Initialiser les positions des boutons après l'affichage
@@ -41,15 +45,25 @@ const btnOui = document.getElementById('btnOui');
 const btnNon = document.getElementById('btnNon');
 const gifContainer = document.getElementById('gifContainer');
 
-// Initialiser le bouton "Non" en position fixed pour pouvoir se déplacer sur tout l'écran
-// Seulement si le bouton existe (après le passage à la page principale)
+// Détecter si on est sur mobile
+function isMobile() {
+    return window.innerWidth <= 600 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Initialiser le bouton "Non" selon le type d'appareil
 if (btnNon) {
-    btnNon.style.position = 'fixed';
+    if (isMobile()) {
+        // Sur mobile, le bouton reste dans le conteneur (pas fixed)
+        btnNon.style.position = 'relative';
+    } else {
+        // Sur desktop, le bouton peut se déplacer sur tout l'écran
+        btnNon.style.position = 'fixed';
+    }
 }
 
 // Initialiser la position du bouton "Non" au chargement - côte à côte avec "Oui", centré
 function initializeButtonPosition() {
-    if (!btnOui || !btnNon) return;
+    if (!btnOui || !btnNon || isMobile()) return; // Ne pas positionner sur mobile
     
     const btnOuiRect = btnOui.getBoundingClientRect();
     const btnNonRect = btnNon.getBoundingClientRect();
@@ -64,6 +78,25 @@ function initializeButtonPosition() {
     btnNon.style.top = initialY + 'px';
 }
 
+// Fonction pour faire rebondir le bouton "Non" sur mobile
+function bounceButtonNon() {
+    if (!btnNon || !isMobile()) return;
+    
+    // Retirer l'animation précédente si elle existe
+    btnNon.classList.remove('bouncing');
+    
+    // Forcer un reflow pour réinitialiser l'animation
+    void btnNon.offsetWidth;
+    
+    // Ajouter l'animation de rebond
+    btnNon.classList.add('bouncing');
+    
+    // Retirer la classe après l'animation
+    setTimeout(function() {
+        btnNon.classList.remove('bouncing');
+    }, 500);
+}
+
 // Initialiser au chargement et après un petit délai pour s'assurer que tout est rendu
 window.addEventListener('load', function() {
     initializeButtonPosition();
@@ -72,6 +105,9 @@ window.addEventListener('load', function() {
 
 // Réinitialiser la position si la fenêtre est redimensionnée
 window.addEventListener('resize', function() {
+    // Ne pas repositionner sur mobile
+    if (isMobile()) return;
+    
     // Ne réinitialiser que si le bouton n'a pas encore bougé (position initiale)
     const btnNonRect = btnNon.getBoundingClientRect();
     const btnOuiRect = btnOui.getBoundingClientRect();
@@ -140,6 +176,9 @@ function moveToCenter() {
 
 // Fonction pour déplacer le bouton "Non" sur tout l'écran
 function moveButtonNon(mouseX = null, mouseY = null) {
+    // Ne pas déplacer sur mobile
+    if (isMobile()) return;
+    
     const btnNonRect = btnNon.getBoundingClientRect();
     
     // Position actuelle du bouton (coordonnées absolues de la fenêtre)
@@ -206,23 +245,26 @@ function moveButtonNon(mouseX = null, mouseY = null) {
     btnNon.style.transform = 'translate(0, 0)';
 }
 
-// Désactiver les événements de pointeur sur le bouton "Non" pour empêcher le clic
-btnNon.style.pointerEvents = 'none';
+// Désactiver les événements de pointeur sur le bouton "Non" pour empêcher le clic (desktop uniquement)
+if (!isMobile()) {
+    btnNon.style.pointerEvents = 'none';
+}
 
 // Variables pour suivre la position de la souris
 let lastMouseX = null;
 let lastMouseY = null;
 
-// Détecter quand la souris s'approche du bouton "Non"
+// Détecter quand la souris s'approche du bouton "Non" (desktop uniquement)
 document.addEventListener('mouseenter', function(e) {
-    if (e.target === btnNon) {
-        moveButtonNon(e.clientX, e.clientY);
-    }
+    if (isMobile() || e.target !== btnNon) return;
+    moveButtonNon(e.clientX, e.clientY);
 }, true);
 
-// Détecter le mouvement de la souris près du bouton "Non" - VERSION ULTRA RÉACTIVE
+// Détecter le mouvement de la souris près du bouton "Non" - VERSION ULTRA RÉACTIVE (desktop uniquement)
 let lastMoveTime = 0;
 document.addEventListener('mousemove', function(e) {
+    if (isMobile()) return; // Ne pas déplacer sur mobile
+    
     lastMouseX = e.clientX;
     lastMouseY = e.clientY;
     
@@ -240,8 +282,10 @@ document.addEventListener('mousemove', function(e) {
     
     // Si la souris est à moins de 100px du bouton, le déplacer IMMÉDIATEMENT
     if (distance < 100) {
-        // Désactiver complètement le pointeur
-        btnNon.style.pointerEvents = 'none';
+        // Désactiver complètement le pointeur (desktop uniquement)
+        if (!isMobile()) {
+            btnNon.style.pointerEvents = 'none';
+        }
         
         // Déplacer immédiatement sans timeout
         const now = Date.now();
@@ -254,13 +298,21 @@ document.addEventListener('mousemove', function(e) {
 
 // Vérification continue avec requestAnimationFrame pour s'assurer que le bouton bouge toujours
 function continuousCheck() {
+    // Ne pas vérifier sur mobile
+    if (isMobile()) {
+        requestAnimationFrame(continuousCheck);
+        return;
+    }
+    
     const btnNonRect = btnNon.getBoundingClientRect();
     const currentX = btnNonRect.left;
     const currentY = btnNonRect.top;
     
     // Vérifier si le bouton est dans un coin et le ramener vers le centre
     if (isInCorner(currentX, currentY, btnNonRect.width, btnNonRect.height)) {
-        btnNon.style.pointerEvents = 'none';
+        if (!isMobile()) {
+            btnNon.style.pointerEvents = 'none';
+        }
         moveToCenter();
     } else if (lastMouseX !== null && lastMouseY !== null) {
         const distance = getDistance(
@@ -272,7 +324,9 @@ function continuousCheck() {
         
         // Si la souris est proche, continuer à déplacer le bouton
         if (distance < 120) {
-            btnNon.style.pointerEvents = 'none';
+            if (!isMobile()) {
+                btnNon.style.pointerEvents = 'none';
+            }
             moveButtonNon(lastMouseX, lastMouseY);
         }
     }
@@ -284,6 +338,28 @@ requestAnimationFrame(continuousCheck);
 
 // Détecter mousedown pour déplacer le bouton AVANT le clic - PROTECTION MAXIMALE
 document.addEventListener('mousedown', function(e) {
+    if (isMobile()) {
+        // Sur mobile, faire rebondir le bouton au lieu de le déplacer
+        const btnNonRect = btnNon.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const distance = getDistance(
+            mouseX, 
+            mouseY, 
+            btnNonRect.left + btnNonRect.width / 2, 
+            btnNonRect.top + btnNonRect.height / 2
+        );
+        
+        if (distance < btnNonRect.width + 20) {
+            e.preventDefault();
+            e.stopPropagation();
+            bounceButtonNon();
+            return false;
+        }
+        return;
+    }
+    
     const btnNonRect = btnNon.getBoundingClientRect();
     const mouseX = e.clientX;
     const mouseY = e.clientY;
@@ -301,8 +377,10 @@ document.addEventListener('mousedown', function(e) {
         e.stopPropagation();
         e.stopImmediatePropagation();
         
-        // Désactiver le pointeur
-        btnNon.style.pointerEvents = 'none';
+        // Désactiver le pointeur (desktop uniquement)
+        if (!isMobile()) {
+            btnNon.style.pointerEvents = 'none';
+        }
         
         // Déplacer immédiatement très loin
         moveButtonNon(mouseX, mouseY);
@@ -336,26 +414,29 @@ btnNon.addEventListener('click', function(e) {
     e.stopPropagation();
     e.stopImmediatePropagation();
     
-    // Déplacer le bouton immédiatement très loin
-    moveButtonNon();
+    // Sur mobile, faire rebondir le bouton
+    if (isMobile()) {
+        bounceButtonNon();
+    } else {
+        // Sur desktop, déplacer le bouton immédiatement très loin
+        moveButtonNon();
+    }
     return false;
 }, true);
 
-// Protection supplémentaire avec mouseup
+// Protection supplémentaire avec mouseup (desktop uniquement)
 btnNon.addEventListener('mouseup', function(e) {
+    if (isMobile()) return;
     e.preventDefault();
     e.stopPropagation();
     moveButtonNon(e.clientX, e.clientY);
     return false;
 }, true);
 
-// Protection avec touchstart pour mobile
+// Protection avec touchstart pour mobile - FAIRE REBONDIR
 btnNon.addEventListener('touchstart', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (e.touches.length > 0) {
-        const touch = e.touches[0];
-        moveButtonNon(touch.clientX, touch.clientY);
-    }
+    bounceButtonNon();
     return false;
 }, true);
